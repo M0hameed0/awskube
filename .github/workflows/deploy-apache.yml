@@ -24,10 +24,8 @@ jobs:
 
     # Étape 3 : Configurer kubectl pour interagir avec votre cluster EKS
     - name: Set up kubectl
-      uses: eks-actions/eks-kubeconfig@v1
-      with:
-        cluster-name: cluster2  # Remplacez par le nom de votre cluster
-        region: us-east-1  # Remplacez par votre région
+      run: |
+        aws eks update-kubeconfig --name cluster2 --region us-east-1  # Remplacez 'cluster2' par le nom de votre cluster
 
     # Étape 4 : Appliquer le fichier de déploiement Apache YAML
     - name: Deploy Apache to EKS
