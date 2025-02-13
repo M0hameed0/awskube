@@ -12,7 +12,7 @@ jobs:
     steps:
     # Étape 1 : Check out le code du repository
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Étape 2 : Configurer AWS CLI
     - name: Set up AWS CLI
@@ -24,6 +24,11 @@ jobs:
         region: us-east-1
 
     # Étape 3 : Configurer kubectl pour interagir avec votre cluster EKS
+    - name: Install kubectl
+      run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
     - name: Set up kubectl
       run: |
         aws eks update-kubeconfig --name cluster2 --region us-east-1  # Remplacez 'cluster2' par le nom de votre cluster
@@ -31,3 +36,9 @@ jobs:
     # Étape 4 : Appliquer le fichier de déploiement Apache YAML
     - name: Deploy Apache to EKS
       run: kubectl apply -f apache-deployment.yaml
+      
+    - name: Verify Deployment
+      run: |
+        kubectl get pods -n testcluster
+        kubectl get svc -n testcluster
+
