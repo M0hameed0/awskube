@@ -35,10 +35,12 @@ jobs:
 
     # Étape 4 : Appliquer le fichier de déploiement Apache YAML
     - name: Deploy Apache to EKS
-      run: kubectl apply -f apache-deployment.yaml
+      run: |
+        kubectl apply -f apache-deployment.yaml
+        kubectl apply -f apache-service.yaml
       
     - name: Verify Deployment
       run: |
-        kubectl get pods -n testcluster
-        kubectl get svc -n testcluster
+        kubectl get pods -n kubespace
+        kubectl get svc -n kubespace
 
